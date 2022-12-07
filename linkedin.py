@@ -12,31 +12,24 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
-#criar options
-
 from PySimpleGUI import PySimpleGUI as sg
 
-#Layout
-#DarkBlue19
+#Etapa 1.0 - criando o Layout em SimpleGui
 sg.theme('Reddit')
 layout = [
     [sg.Text('Area de profissão: '), sg.Input()],
     [sg.Button('Pesquisar')]
 ]
 
-input_profissional = 'Engenheiro de software'
-
 #Janela
-janela = sg.Window('Linkedin Scraping', layout)
+window = sg.Window('Linkedin Scraping', layout)
 
-#var do drive
+#Etapa 1.1 - ajustes do webdriver
+
 #colocar o caminho do seu WebDriver driver = webdriver.Chrome('AQUIII')
 driver = webdriver.Chrome('Linkdin_srcaping\chromedriver.exe')
 
-
 sleep(3)
-
-print('> Entrou no Chrome ! <')
 
 def Exec():
     
@@ -56,30 +49,32 @@ def Exec():
     sleep(1)
     buttun_entrar.click()
     sleep(5)
-
-    #pesquisar profissional
-    """ btn_search = driver.find_element(By.CLASS_NAME, input_pesquisar)
-    btn_search.send_keys(input_profissional)
-    btn_search.send_keys(Keys.ENTER) """
             
-    sleep(1.5)
-            
-    #url das pessoas
+    #url dos profissionais
     url_people = f'https://www.linkedin.com/search/results/people/?keywords={input_profissional}'
-
-    driver.get(url_people) 
+    #abrindo direto a pagina
+    driver.get(url_people)
+    
 
 #Ler os eventos do front end
 while True:
     
-    eventos, valores = janela.read()
+    eventos, valores = window.read()
+    #var do input do Layout
+    input_profissional = (eventos, valores[0])  
+    
     if eventos == sg.WINDOW_CLOSED:
-        
+        print('fechando...')
         break
+        
     
     if eventos == 'Pesquisar':
         
+        print('tudo correto.')
         Exec()
+        
+        
+#fazer o scraping
 
 
 

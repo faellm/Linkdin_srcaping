@@ -17,9 +17,12 @@ from PySimpleGUI import PySimpleGUI as sg
 #Etapa 1.0 - criando o Layout em SimpleGui
 sg.theme('Reddit')
 layout = [
-    [sg.Text('Area de profissão: '), sg.Input()],
+    [sg.Text('Pesquisa '), sg.Input()],
+    [sg.Text('1 pagina = 10 pessoas')],
+    [sg.Text('Quantas você deseja capturar? '), sg.Input()],
     [sg.Button('Pesquisar')]
 ]
+
 
 #Janela
 window = sg.Window('Linkedin Scraping', layout)
@@ -55,15 +58,36 @@ def Exec():
     #abrindo direto a pagina
     driver.get(url_people)
     
-
+    #pegando o html e jogando na variavel
+    page_content = driver.page_source
+    
+    def scraping():
+            
+            site = BeautifulSoup(page_content, 'html.parser')
+            
+            #### fazer scraping de perfil ######
+            
+            #vai ser preciso criar um link com o nome 
+            
+            #depois fazer o scraping
+            
+            
+            #print(site.prettify())
+            
+            
+        
+    scraping()
+    
 #Ler os eventos do front end
 while True:
     
     eventos, valores = window.read()
     #var do input do Layout
-    input_profissional = (eventos, valores[0])  
+    input_profissional = (eventos, valores[0])
+    input_page = (eventos, valores[2])  
     
     if eventos == sg.WINDOW_CLOSED:
+        
         print('fechando...')
         break
         
@@ -74,7 +98,7 @@ while True:
         Exec()
         
         
-#fazer o scraping
+
 
 
 

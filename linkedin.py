@@ -17,9 +17,11 @@ from PySimpleGUI import PySimpleGUI as sg
 #Etapa 1.0 - criando o Layout em SimpleGui
 sg.theme('Reddit')
 layout = [
-    [sg.Text('Pesquisa '), sg.Input()],
+    [sg.Text('Pesquisa ')],
+    [sg.Input()],
     [sg.Text('1 pagina = 10 pessoas')],
-    [sg.Text('Quantas você deseja capturar? '), sg.Input()],
+    [sg.Text('Quantas você deseja capturar? ')],
+    [ sg.Input()],
     [sg.Button('Pesquisar')]
 ]
 
@@ -30,7 +32,7 @@ window = sg.Window('Linkedin Scraping', layout)
 #Etapa 1.1 - ajustes do webdriver
 
 #colocar o caminho do seu WebDriver driver = webdriver.Chrome('AQUIII')
-driver = webdriver.Chrome('Linkdin_srcaping\chromedriver.exe')
+driver = webdriver.Chrome('/Users/rafaellaramartins/Desktop/99freelas/chromedriver - cópia')
 
 sleep(3)
 
@@ -58,24 +60,29 @@ def Exec():
     #abrindo direto a pagina
     driver.get(url_people)
     
-    #pegando o html e jogando na variavel
-    page_content = driver.page_source
+    
+    
     
     def scraping():
-            
-            site = BeautifulSoup(page_content, 'html.parser')
-            
+
             #### fazer scraping de perfil ######
-            
-            #vai ser preciso criar um link com o nome 
-            
-            #depois fazer o scraping
-            
-            
-            #print(site.prettify())
-            
-            
-        
+            def GetURL():
+                page_source = BeautifulSoup(driver.page_source)
+                profiles = page_source.find_all('a', class_ = 'app-aware-link')
+                #('a', class_ = 'search-result__result-link ember-view')
+                all_profile_URL = []
+                for profile in profiles:
+                    profile_ID = profile.get('href')
+                    profile_URL = "https://www.linkedin.com" + profile_ID
+                    #profile_URL = profile.get('href')
+                    if profile_URL not in all_profile_URL:
+                        
+                        all_profile_URL.append(profile_URL)
+                        
+                        print(all_profile_URL)
+                        
+                return all_profile_URL
+            GetURL()
     scraping()
     
 #Ler os eventos do front end
@@ -83,8 +90,10 @@ while True:
     
     eventos, valores = window.read()
     #var do input do Layout
-    input_profissional = (eventos, valores[0])
-    input_page = (eventos, valores[2])  
+    #input_profissional = (eventos, valores[1])
+    #input_page = (eventos, valores[2])  
+    
+    input_profissional = input('pesquisar: ')
     
     if eventos == sg.WINDOW_CLOSED:
         
@@ -96,7 +105,7 @@ while True:
         
         print('tudo correto.')
         Exec()
-        
+        break
         
 
 
